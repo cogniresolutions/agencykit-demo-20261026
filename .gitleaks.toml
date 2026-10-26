@@ -1,0 +1,14 @@
+# gitleaks configuration: default rules, plus ignore local files that git never tracks
+# (generated .env secrets, Next.js build output and dependencies).
+title = "AgencyKit gitleaks config"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Local, git-ignored files"
+paths = [
+  '''(^|/)\.env$''',
+  '''(^|/)\.next/''',
+  '''(^|/)node_modules/''',
+]
