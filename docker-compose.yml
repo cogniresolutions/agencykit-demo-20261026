@@ -1,0 +1,46 @@
+# AgencyKit: one-command install
+#   ./scripts/setup.sh && docker compose up -d --build
+# Both services are bound to 127.0.0.1 only. Put a TLS reverse proxy in front for production.
+name: agencykit
+
+services:
+  db:
+    image: postgres:16.15-alpine3.24
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-agencykit_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run ./scripts/setup.sh first to generate secrets}
+      POSTGRES_DB: ${POSTGRES_DB:-agencykit}
+    ports:
+      - "127.0.0.1:${DB_PORT:-5433}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    security_opt:
+      - no-new-privileges:true
+
+  app:
+    build: .
+    image: agencykit:local
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://agencykit_app:${APP_DB_PASSWORD:?Run ./scripts/setup.sh first}@db:5432/${POSTGRES_DB:-agencykit}
+      DATABASE_ADMIN_URL: postgres://${POSTGRES_USER:-agencykit_admin}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-agencykit}
+    ports:
+      - "127.0.0.1:${APP_PORT:-3000}:3000"
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
+volumes:
+  pgdata:
