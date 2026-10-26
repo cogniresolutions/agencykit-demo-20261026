@@ -1,0 +1,127 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+
+  --color-ink-950: #050608;
+  --color-ink-900: #0a0b0f;
+  --color-ink-850: #0e1015;
+  --color-ink-800: #13151c;
+  --color-ink-700: #1b1e27;
+  --color-ink-600: #262a35;
+  --color-ink-500: #3a3f4d;
+  --color-ink-400: #6b7180;
+  --color-ink-300: #9aa0ad;
+  --color-ink-200: #c9cdd6;
+  --color-ink-100: #e8eaef;
+
+  --color-brand: #ff6b2c;
+  --color-success: #34d399;
+  --color-warning: #fbbf24;
+  --color-danger: #f87171;
+
+  --animate-fade-up: fade-up 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+:root {
+  --accent: #ff6b2c;
+  color-scheme: dark;
+}
+
+html,
+body {
+  background: var(--color-ink-950);
+  color: var(--color-ink-100);
+}
+
+body {
+  font-feature-settings: "cv11", "ss01", "ss03";
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--accent) 45%, transparent);
+  color: white;
+}
+
+/* App surfaces */
+@utility glass {
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.045), rgb(255 255 255 / 0.018));
+  border: 1px solid rgb(255 255 255 / 0.075);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.05),
+    0 20px 40px -24px rgb(0 0 0 / 0.6);
+  backdrop-filter: blur(14px);
+}
+
+@utility text-accent {
+  color: var(--accent);
+}
+
+@utility bg-accent {
+  background-color: var(--accent);
+}
+
+@utility border-accent {
+  border-color: var(--accent);
+}
+
+@utility accent-glow {
+  background: radial-gradient(60% 60% at 50% 0%, color-mix(in oklab, var(--accent) 22%, transparent), transparent 70%);
+}
+
+@utility app-backdrop {
+  background:
+    radial-gradient(900px 500px at 85% -10%, color-mix(in oklab, var(--accent) 13%, transparent), transparent 60%),
+    radial-gradient(700px 500px at -10% 110%, rgb(99 102 241 / 0.08), transparent 60%),
+    var(--color-ink-950);
+}
+
+@utility grid-fade {
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.035) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(255 255 255 / 0.12) transparent;
+}
+
+input[type="color"] {
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
+  padding: 0;
+  background: none;
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 10px;
+}
+
+dialog::backdrop {
+  background: rgb(0 0 0 / 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.recharts-wrapper *:focus {
+  outline: none;
+}
